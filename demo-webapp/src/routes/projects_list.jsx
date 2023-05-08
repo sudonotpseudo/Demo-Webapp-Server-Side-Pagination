@@ -1,12 +1,15 @@
 import React from 'react';
-import { useParams } from 'react-router-dom'
 import { Link } from "react-router-dom";
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import overlayFactory from 'react-bootstrap-table2-overlay';
-import filterFactory, { textFilter, dateFilter, Comparator } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter, dateFilter } from 'react-bootstrap-table2-filter';
 import { useState, useEffect } from "react";
 
+const NoDataIndication = () => (
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+);
 
 const RemotePagination = ({ data, columns, loading, page, sizePerPage, onTableChange, totalSize, defaultSorted }) => (
   <div>
@@ -19,7 +22,6 @@ const RemotePagination = ({ data, columns, loading, page, sizePerPage, onTableCh
         cellEdit: false
       } }
       keyField="id"
-      loading={ loading }
       data={ data }
       columns={ columns }
       striped
@@ -28,7 +30,7 @@ const RemotePagination = ({ data, columns, loading, page, sizePerPage, onTableCh
       pagination={ paginationFactory({ page, sizePerPage, totalSize }) }
       filter={ filterFactory() }
       onTableChange={ onTableChange }
-      overlay={ overlayFactory({ spinner: true, styles: { overlay: (base) => ({...base, background: 'rgba(255, 0, 0, 0.5)'}) } }) }
+      loading={ loading }
     />
   </div>
 );
@@ -148,10 +150,10 @@ export default function Project() {
   
 
   return (
-    !loading && 
     <div id="project">
       <div>
         <h1>Project List</h1>
+        {!loading && !error ? (
         <RemotePagination
           loading={ loading }
           data={ data.data }
@@ -162,6 +164,10 @@ export default function Project() {
           defaultSorted={defaultSorted}
           onTableChange={ onTableChange }
         />
+        ) : (
+          <NoDataIndication/>
+        )
+}
       </div>
     </div>
   );

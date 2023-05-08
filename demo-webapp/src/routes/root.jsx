@@ -5,6 +5,7 @@ import {
     useOutlet,
     } from "react-router-dom";
 import ProjectsList from "./projects_list"
+import {ReactComponent as Home} from '../house.svg';
   
 
 
@@ -13,21 +14,19 @@ export default function Root() {
       <>
         <div id="sidebar">
           <h1>Demo Web App</h1>
-          <div>
-            <Link to="/">
-                <button type="button">
-                    Home
-                </button>
-            </Link>
-          </div>
           <nav>
+          {useOutlet() == null ? (
+            <div></div>
+          ) : (
             <ul>
                 <li>
                     <Link to="/">
-                        Home
+                      Home
+                      <Home className='home'/>
                     </Link>
                 </li>
             </ul>
+          )}
           </nav>
         </div>
         <div id="detail">
