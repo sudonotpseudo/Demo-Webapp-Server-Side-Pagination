@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import cast, String
 from sqlalchemy.sql import func
 from sqlalchemy.inspection import inspect
-import json
 from flask_migrate import Migrate
 from datetime import datetime
 
