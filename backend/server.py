@@ -84,6 +84,7 @@ class Users_Assignment(db.Model, Serializer):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     project_id = db.Column(db.Integer, db.ForeignKey('projects.id'), nullable=False)
+    db.UniqueConstraint(user_id, project_id)
 
     def __init__(self, user_id, project_id):
         self.user_id = user_id
