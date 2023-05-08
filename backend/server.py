@@ -113,8 +113,6 @@ def get_projects():
         elif attr == "id":
             queryset = queryset.filter(cast(Projects.id, String).like(f"%{value}%"))
         elif attr == "start_date":
-            #TODO [BW] Confirm with team whether or not to treat Start Date at String or Timestamp for purposes of filtering
-            #For the time being, disallow filtering on this field
             [c, d] = value.split(",")
             d = datetime.strptime(d, "%Y-%m-%d")
             match(c):
@@ -132,7 +130,6 @@ def get_projects():
                     queryset = queryset.filter(Projects.start_date <= d)
                 case "_":
                     pass
-            #queryset = queryset.filter(Projects.start_date.like(f"%{value}%"))
             pass
     
     #apply sort and sort order
@@ -154,12 +151,7 @@ def get_projects():
         case "_":
             pass
         
-    #queryset = queryset.order_by()
-
-    #queryset= queryset.filter_by(**filters)
-
     queryset = queryset.paginate(page=page, per_page=page_size)
-    #queryset = Projects.query.filter().paginate(page=page, per_page=page_size)
     
     result = dict(
         data = [q.serialize() for q in queryset],
@@ -210,12 +202,7 @@ def get_users():
         case "_":
             pass
         
-    #queryset = queryset.order_by()
-
-    #queryset= queryset.filter_by(**filters)
-
     queryset = queryset.paginate(page=page, per_page=page_size)
-    #queryset = Projects.query.filter().paginate(page=page, per_page=page_size)
     
     result = dict(
         data = [q.serialize() for q in queryset],
@@ -266,12 +253,7 @@ def get_files():
         case "_":
             pass
         
-    #queryset = queryset.order_by()
-
-    #queryset= queryset.filter_by(**filters)
-
     queryset = queryset.paginate(page=page, per_page=page_size)
-    #queryset = Projects.query.filter().paginate(page=page, per_page=page_size)
     
     result = dict(
         data = [q.serialize() for q in queryset],
