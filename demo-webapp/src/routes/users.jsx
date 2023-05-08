@@ -46,7 +46,6 @@ export default function Project() {
           );
         }
         let actualData = await response.json();
-        console.log(actualData.data)
         setData(actualData);
         setError(null);
       } catch(err) {
@@ -83,8 +82,6 @@ export default function Project() {
   }];
 
   const onTableChange = (type, newState) => {
-    console.log(type)
-    console.log(newState)
     //TODO [BW] - Convert the following async to be global and assume the purpose of the initial getData async above
     const getData = async (newState) => {
       try {
@@ -113,7 +110,6 @@ export default function Project() {
           );
         }
         let actualData = await response.json();
-        console.log(actualData.data)
         setData(actualData);
         setError(null);
       } catch(err) {
