@@ -34,7 +34,6 @@ const RemotePagination = ({ data, columns, loading, page, sizePerPage, onTableCh
 );
 
 export default function Project() {
-  const {projectId} = useParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -153,29 +152,6 @@ export default function Project() {
     <div id="project">
       <div>
         <h1>Project List</h1>
-        {/*
-        <BootstrapTable 
-          remote={ {
-            filter: true,
-            pagination: true,
-            sort: true,
-            cellEdit: false
-          } }
-          bootstrap4
-          loading={ loading }
-          keyField='id' 
-          data={ data.data } 
-          columns={ columns } 
-          striped
-          hover
-          defaultSorted={defaultSorted}
-          filter={ filterFactory() }
-          overlay={ overlayFactory({ spinner: true, styles: { overlay: (base) => ({...base, background: 'rgba(255, 0, 0, 0.5)'}) } }) }
-          onTableChange={ onTableChange }
-          >
-          </BootstrapTable>
-
-        */}
         <RemotePagination
           loading={ loading }
           data={ data.data }
