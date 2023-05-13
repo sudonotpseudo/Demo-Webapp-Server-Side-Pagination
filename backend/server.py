@@ -1,10 +1,10 @@
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import cast, String
+from sqlalchemy import cast, String, and_, or_
 from sqlalchemy.sql import func
 from sqlalchemy.inspection import inspect
 from flask_migrate import Migrate
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Initializing flask app
 app = Flask(__name__)
@@ -117,22 +117,33 @@ def get_projects():
             d = datetime.strptime(d, "%Y-%m-%d")
             match(c):
                 case "=":
-                    queryset = queryset.filter(Projects.start_date == d)
+                    queryset = queryset.filter(
+                        and_(
+                            Projects.start_date >= d, 
+                            Projects.start_date < (d+timedelta(days=1))
+                        )
+                    )
                 case "!=":
-                    queryset = queryset.filter(Projects.start_date != d)
+                    queryset = queryset.filter(
+                        or_(
+                            Projects.start_date < d, 
+                            Projects.start_date >= (d+timedelta(days=1))
+                        )
+                    )
                 case ">":
-                    queryset = queryset.filter(Projects.start_date > d)
+                    queryset = queryset.filter(Projects.start_date >= d+timedelta(days=1))
                 case ">=":
                     queryset = queryset.filter(Projects.start_date >= d)
                 case "<":
                     queryset = queryset.filter(Projects.start_date < d)
                 case "<=":
-                    queryset = queryset.filter(Projects.start_date <= d)
+                    queryset = queryset.filter(Projects.start_date < d+timedelta(days=1))
                 case "_":
                     pass
             pass
     
     #apply sort and sort order
+    """
     match(sort_type):
         case "asc":
             if sort == "name":
@@ -150,6 +161,12 @@ def get_projects():
                 queryset = queryset.order_by(Projects.start_date.desc())
         case "_":
             pass
+
+    """
+
+    #use eval to condense the above sort code
+    if sort_type in ['asc', 'desc']:
+        queryset = eval(f"queryset.order_by(Projects.{sort}.{sort_type}())")
         
     queryset = queryset.paginate(page=page, per_page=page_size)
     
@@ -184,6 +201,7 @@ def get_users():
             queryset = queryset.filter(Users.email.like(f"%{value}%")) 
     
     #apply sort and sort order
+    """
     match(sort_type):
         case "asc":
             if sort == "name":
@@ -201,7 +219,11 @@ def get_users():
                 queryset = queryset.order_by(Users.email.desc())
         case "_":
             pass
-        
+    """
+    #use eval to condense the above sort code
+    if sort_type in ['asc', 'desc']:
+        queryset = eval(f"queryset.order_by(Users.{sort}.{sort_type}())")
+
     queryset = queryset.paginate(page=page, per_page=page_size)
     
     result = dict(
@@ -235,6 +257,7 @@ def get_files():
             queryset = queryset.filter(Files.type.like(f"%{value}%")) 
     
     #apply sort and sort order
+    """
     match(sort_type):
         case "asc":
             if sort == "name":
@@ -252,6 +275,10 @@ def get_files():
                 queryset = queryset.order_by(Files.type.desc())
         case "_":
             pass
+    """   
+    #use eval to condense the above sort code
+    if sort_type in ['asc', 'desc']:
+        queryset = eval(f"queryset.order_by(Files.{sort}.{sort_type}())")
         
     queryset = queryset.paginate(page=page, per_page=page_size)
     
